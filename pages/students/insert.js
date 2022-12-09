@@ -1,38 +1,32 @@
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import {database} from "../../firebase"
+import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/router"
 import { useState } from "react";
+import { database } from "../../firebase";
 
-
-function Update() {
-    const router = useRouter();
-    const id = router.query.id;
+function Insert() {
     const [name, setName] = useState("");
     const [marks, setMarks] = useState("");
-    const updateFields = async (id: any) => {
-        let fieldToEdit = doc(database, 'todos', id);
-        await updateDoc(fieldToEdit, {
-          name: name,
-          marks: marks
+
+    const AddValue = () => {
+
+        addDoc(collection(database, 'todos'), {
+            name: name,
+            marks: marks
         })
-        .then(() => {
-          alert('Data Updated')
-        })
-        .catch((err) => {
-          console.log(err);
-        })
+            .then(() => {
+                alert('Data Saved');
+                setName('');
+                setMarks('');
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        // console.log(name);
+        // console.log(marks);
+
     }
 
-    // const getData = async () => {
-    //     await getDoc(doc(database, "todos", studentId))
-    //     .then((response) => {
-    //       setName(response.data().name)
-    //       setMarks(response.data().marks)
-    //     })
-    //   }
-
-    
-   
+    const router = useRouter();
     return (
         <div className='flex flex-col items-center justify-center'>
             <h2>Add Detail</h2>
@@ -52,9 +46,9 @@ function Update() {
                     className='h-7 px-2 w-full rounded-md'
                 />
                 <button
-                // onClick={()}
+                    onClick={() => AddValue()}
                     className='bg-blue-500 w-full rounded-full py-1 text-white'>
-                    Update
+                    Add
                 </button>
             </div>
             <button
@@ -67,4 +61,4 @@ function Update() {
     )
 }
 
-export default Update
+export default Insert
